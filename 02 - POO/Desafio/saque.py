@@ -14,4 +14,4 @@ class Saque(Transacao):
         if sucesso:
             print(f"Saque de {self._valor} realizado com sucesso.")
         else:
-            print(f"Saque de {self._valor} falhou devido a saldo insuficiente.")
+            print(f"Saque de {self._valor} falhou devido a saldo insuficiente")
