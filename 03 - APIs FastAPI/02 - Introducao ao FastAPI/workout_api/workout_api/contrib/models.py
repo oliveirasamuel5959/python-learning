@@ -1,5 +1,5 @@
 from uuid import uuid4
-from sqlachemy.orm import Mapped, mapped_column, DeclarativeBase
+from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
 from sqlalchemy import UUID
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 
