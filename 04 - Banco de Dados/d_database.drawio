@@ -1,0 +1,51 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36" version="28.2.8">
+  <diagram name="Página-1" id="cTJ83WwisgvmmhaO_Itc">
+    <mxGraphModel dx="786" dy="464" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" edge="1" parent="1" source="_dlZyn9bmFUE1Vz2Ll3o-1" target="_dlZyn9bmFUE1Vz2Ll3o-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-1" value="" style="image;html=1;image=img/lib/clip_art/computers/Database_128x128.png;shadow=0;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="360" y="178.02" width="54" height="57" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-2" value="" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;prIcon=api;shadow=0;align=center;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="204" y="181.7" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="_dlZyn9bmFUE1Vz2Ll3o-3" target="_dlZyn9bmFUE1Vz2Ll3o-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="429.5" y="328.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-3" value="Cloud" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;shadow=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;fillColor=default;" vertex="1" parent="1">
+          <mxGeometry x="280" y="299" width="73" height="59" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" edge="1" parent="1" source="_dlZyn9bmFUE1Vz2Ll3o-4" target="_dlZyn9bmFUE1Vz2Ll3o-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-4" value="" style="verticalLabelPosition=bottom;aspect=fixed;html=1;shape=mxgraph.salesforce.web;fillColorStyles=fillColor2,fillColor3,fillColor4;fillColor2=#032d60;fillColor3=#0d9dda;fillColor4=#ffffff;fillColor=none;strokeColor=none;shadow=0;align=center;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="614" y="182" width="60" height="47.400000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" edge="1" parent="1" source="_dlZyn9bmFUE1Vz2Ll3o-5" target="_dlZyn9bmFUE1Vz2Ll3o-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-5" value="" style="points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;fillColor=#FF6A00;strokeColor=none;shape=mxgraph.alibaba_cloud.webplus_web_app_service;verticalAlign=top;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="488" y="183.05" width="46.95" height="46.95" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-12" value="API" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="197" y="148.01999999999998" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-13" value="Banco de Dados" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="339" y="145" width="102" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-14" value="Web" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="460.47" y="145" width="102" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_dlZyn9bmFUE1Vz2Ll3o-15" value="Client" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=default;" vertex="1" parent="1">
+          <mxGeometry x="593" y="145" width="102" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
