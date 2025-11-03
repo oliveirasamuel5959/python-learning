@@ -30,4 +30,4 @@ class Address(Base):
     user = relationship("User", back_populates="address")
 
     def __repr__(self):
-        return f"Address(id={self.id}, email={self.email_address}"
+        return f"Address(id={self.id}, email_address={self.email_address}"
