@@ -1,9 +1,9 @@
 from fastapi import status, APIRouter
 
-from schemas.post import PostIn
-from views.post import PostOut
-from models.post import posts
-from database import database
+from src.schemas.post import PostIn
+from src.views.post import PostOut
+from src.models.post import posts
+from src.database import database
 
 router = APIRouter(prefix="/posts")
 

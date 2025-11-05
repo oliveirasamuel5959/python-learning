@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from controllers import post
-from controllers.auth import auth
+from src.controllers import post
+from src.controllers.auth import auth
 from contextlib import asynccontextmanager
-from database import database, engine, metadata
+from src.database import database, engine, metadata
 
 servers = [
         {"url": "http://localhost:8000", "description": "Staging environment"},
@@ -11,7 +11,7 @@ servers = [
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from models.post import posts
+    from src.models.post import posts
 
     await database.connect()
     metadata.create_all(engine)
