@@ -22,7 +22,7 @@ async def create_post(post: PostIn):
 
 
 @router.get("/", response_model=list[PostOut])
-async def read_posts(published: bool, limit: int, skip: int = 0):
+async def read_posts(published: bool = False, limit: int = 1, skip: int = 0):
     query = posts.select()
     return await database.fetch_all(query)
 
