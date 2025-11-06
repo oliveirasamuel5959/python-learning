@@ -1,10 +1,11 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column
 from account_api.configs.database import Base
 
 class AccountModel(Base):
     __tablename__ = "accounts"
 
-    id = Column(Integer, primary_key=True, index=True)
-    bank_name = Column(String, index=True)
-    agencia = Column(String)
-    account_type = Column(String, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    bank_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    agencia: Mapped[int] = mapped_column(Integer, nullable=False)
+    account_type: Mapped[str] = mapped_column(String(20), nullable=False)
