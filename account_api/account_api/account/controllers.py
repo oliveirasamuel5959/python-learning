@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from typing import Annotated
 from account_api.account.models import AccountModel
 from account_api.account.schemas import AccountIn
 from account_api.account.schemas import AccountOut
