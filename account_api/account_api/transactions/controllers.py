@@ -4,6 +4,9 @@ from sqlalchemy import select
 from account_api.configs.database import SessionLocal
 from account_api.transactions.schemas import TransactionIn, TransactionOut
 from account_api.transactions.models import TransactionModel
+from account_api.client.models import ClientModel
+from account_api.client.schemas import ClientIn, ClientOut
+
 
 router = APIRouter()
 
