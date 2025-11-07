@@ -3,7 +3,7 @@ from account_api.account.models import AccountModel
 from account_api.account.schemas import AccountIn
 from account_api.account.schemas import AccountOut
 from sqlalchemy.orm import Session
-from account_api.configs.database import SessionLocal, engine, Base
+from account_api.configs.database import SessionLocal
 from sqlalchemy import select
 
 router = APIRouter()
