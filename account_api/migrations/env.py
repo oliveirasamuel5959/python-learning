@@ -5,6 +5,7 @@ from sqlalchemy import pool
 from account_api.configs.database import Base
 from account_api.account.models import AccountModel
 from account_api.transactions.models import TransactionModel
+from account_api.client.models import ClientModel
 
 from alembic import context
 
