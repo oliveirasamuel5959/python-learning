@@ -39,7 +39,8 @@ async def create_account(account_in: AccountIn, db_session: Session = Depends(ge
 )
 async def get_accounts(db_session: Session = Depends(get_db)) -> list[AccountOut]:
     accounts: list[AccountOut] = (db_session.execute(select(AccountModel))).scalars().all()
-    return [AccountOut.model_validate(accounts) for account in accounts]
+    return accounts
+    # return [AccountOut.model_validate(accounts) for account in accounts]
 
 @router.get(
     "/{id}",
