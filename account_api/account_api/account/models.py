@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
-from account_api.configs.database import Base
+from account_api.configs.database import Base, engine
+
+Base.metadata.create_all(bind=engine)
 
 class AccountModel(Base):
     __tablename__ = "accounts"

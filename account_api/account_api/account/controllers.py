@@ -8,9 +8,6 @@ from sqlalchemy import select
 
 router = APIRouter()
 
-# Create tables in the database
-Base.metadata.create_all(bind=engine)
-
 # Dependency to get DB session
 def get_db():
     db = SessionLocal()
@@ -35,12 +32,17 @@ async def create_account(account_in: AccountIn, db_session: Session = Depends(ge
     "/",
     summary="Listar todas as contas",
     status_code=status.HTTP_200_OK, 
-    response_model=list[AccountOut]
+    # response_model=list[AccountOut]
 )
-async def get_accounts(db_session: Session = Depends(get_db)) -> list[AccountOut]:
-    accounts: list[AccountOut] = (db_session.execute(select(AccountModel))).scalars().all()
-    return accounts
-    # return [AccountOut.model_validate(accounts) for account in accounts]
+async def get_accounts(db_session: Session = Depends(get_db)):
+
+    query = select(AccountModel)
+    results: list[AccountOut] = db_session.execute(query).scalars().all()
+
+    return {
+        "results": results,
+        "count": len(results)
+    }
 
 @router.get(
     "/{id}",
@@ -49,9 +51,9 @@ async def get_accounts(db_session: Session = Depends(get_db)) -> list[AccountOut
     response_model=AccountOut
 )
 async def get_account(id: int, db_session: Session = Depends(get_db)) -> AccountOut:
-    account: AccountOut = (
-        db_session.execute(select(AccountModel).filter_by(id=id))
-    ).scalars().first()
+
+    query = select(AccountModel).where(AccountModel.id == id)
+    account: AccountOut = db_session.execute(query).scalars().first()
 
     if not account:
         raise HTTPException(
@@ -67,16 +69,16 @@ async def get_account(id: int, db_session: Session = Depends(get_db)) -> Account
     status_code=status.HTTP_204_NO_CONTENT
 )
 async def delete_account(id: int, db_session: Session = Depends(get_db)) -> None:
-    account: AccountOut = (
-        db_session.execute(select(AccountModel).filter_by(id=id))
-    ).scalars().first()
 
-    if not account:
+    query = select(AccountModel).where(AccountModel.id == id)
+    result: AccountOut = db_session.execute(query).scalars().first()
+
+    if not result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Conta não encontrada no id {id}"
         )
 
-    db_session.delete(account)
+    db_session.delete(result)
     db_session.commit()
 

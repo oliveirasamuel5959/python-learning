@@ -1,7 +1,8 @@
-from datetime import datetime
-from workout_api.contrib.models import BaseModel
 from sqlalchemy import Integer, String , Float, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import datetime
+from workout_api.contrib.models import BaseModel
+
 
 class AtletaModel(BaseModel):
     __tablename__ = "atletas"
