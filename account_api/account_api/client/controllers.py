@@ -26,3 +26,16 @@ async def create_account(account_in: ClientIn, db_session: Session = Depends(get
     db_session.add(client)
     db_session.commit()
     return client
+
+@router.get(
+    "/",
+    summary="Listar todos os clientes",
+    status_code=status.HTTP_200_OK, 
+    response_model=list[ClientOut]
+)
+async def get_clients(db_session: Session = Depends(get_db)) -> list[ClientOut]:
+
+    query = select(ClientModel)
+    clients: list[ClientOut] = db_session.execute(query).scalars().all()
+
+    return clients
