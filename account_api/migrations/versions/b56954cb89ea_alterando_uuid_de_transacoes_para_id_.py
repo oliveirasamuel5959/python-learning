@@ -1,8 +1,8 @@
-"""fix relation clients and transactions bugs
+"""alterando uuid de transacoes para id integer
 
-Revision ID: 040a101e0c55
-Revises: a089880eba26
-Create Date: 2025-11-07 15:22:10.446419
+Revision ID: b56954cb89ea
+Revises: 9b6748f82cee
+Create Date: 2025-11-08 15:43:17.332815
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '040a101e0c55'
-down_revision: Union[str, Sequence[str], None] = 'a089880eba26'
+revision: str = 'b56954cb89ea'
+down_revision: Union[str, Sequence[str], None] = '9b6748f82cee'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
