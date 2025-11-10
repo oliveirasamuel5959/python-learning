@@ -32,6 +32,7 @@ def get_db():
 async def transaction(transaction_in: TransactionIn, db_session: Session = Depends(get_db)):
 
     client_name = transaction_in.client.name
+    transaction_value = transaction_in.value
     
     query_client = select(ClientModel).where(ClientModel.name == client_name)
     client = db_session.execute(query_client).scalars().first()
@@ -52,12 +53,20 @@ async def transaction(transaction_in: TransactionIn, db_session: Session = Depen
         )
     
     if transaction_in.type == "deposito":
-        account.value = account.value + transaction_in.value
+        account.value = account.value + transaction_value
         db_session.commit()
         db_session.refresh(account)
 
     elif transaction_in.type == "saque":
-        account.value = account.value - transaction_in.value
+
+        if account.value > transaction_value:
+            account.value = account.value - transaction_value
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Saldo insuficiente na conta: {account.value}"
+            )
+        
         db_session.commit()
         db_session.refresh(account)
 
