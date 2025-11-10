@@ -74,3 +74,24 @@ async def transaction(transaction_in: TransactionIn, db_session: Session = Depen
     db_session.commit()
     
     return transaction_out
+
+
+
+@router.get(
+    "/",
+    summary="Listar todas as transações",
+    status_code=status.HTTP_200_OK, 
+    # response_model=list[TransactionOut]
+)
+async def transactions_history(db_session: Session = Depends(get_db)):
+
+    query_transaction = select(TransactionModel)
+    transactions: list[TransactionOut] = db_session.execute(query_transaction).scalars().all()
+
+    if not transactions:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nenhuma transação encontrada."
+        )
+    
+    return transactions

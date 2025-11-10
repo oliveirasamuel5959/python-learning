@@ -67,6 +67,12 @@ async def get_accounts(db_session: Session = Depends(get_db)):
     query = select(AccountModel)
     results: list[AccountOut] = db_session.execute(query).scalars().all()
 
+    if not results:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nenhuma conta encontrada."
+        )
+
     return {
         "results": results,
         "count": len(results)
