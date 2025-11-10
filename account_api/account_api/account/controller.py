@@ -96,7 +96,7 @@ async def get_account(id: int, db_session: Session = Depends(get_db)) -> Account
     summary="Deletar uma conta por ID",
     status_code=status.HTTP_204_NO_CONTENT
 )
-async def delete_account(id: int, db_session: Session = Depends(get_db)) -> None:
+async def delete(id: int, db_session: Session = Depends(get_db)) -> None:
 
     query = select(AccountModel).where(AccountModel.id == id)
     result: AccountOut = db_session.execute(query).scalars().first()

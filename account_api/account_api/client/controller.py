@@ -39,3 +39,42 @@ async def get_clients(db_session: Session = Depends(get_db)) -> list[ClientOut]:
     clients: list[ClientOut] = db_session.execute(query).scalars().all()
 
     return clients
+
+@router.get(
+    "/{id}",
+    summary="Retornar client por id",
+    status_code=status.HTTP_200_OK, 
+    response_model=ClientOut
+)
+async def get_client(id: int, db_session: Session = Depends(get_db)) -> ClientOut:
+
+    query = select(ClientModel).where(ClientModel.id == id)
+    client: ClientOut = db_session.execute(query).scalars().first()
+
+    if not client:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Client {id} nao foi encontrado."
+        )
+
+    return client
+
+@router.delete(
+    "/{id}",
+    summary="Deletar client por id",
+    status_code=status.HTTP_204_NO_CONTENT
+)
+async def delete_client(id: int, db_session: Session = Depends(get_db)) -> None:
+
+    query = select(ClientModel).where(ClientModel.id == id)
+    client: ClientOut = db_session.execute(query).scalars().first()
+
+    if not client:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Client {id} nao foi encontrado."
+        )
+    
+    db_session.delete(client)
+    db_session.commit()
+
