@@ -99,14 +99,14 @@ async def transactions_history(db_session: Session = Depends(get_db)):
 
 
 @router.get(
-    "/{id}",
-    summary="Listar todas as transações",
+    "/{client_id}",
+    summary="Listar transações por id",
     status_code=status.HTTP_200_OK, 
     # response_model=list[TransactionOut]
 )
-async def transactions_history(id: int, db_session: Session = Depends(get_db)):
+async def transactions_history(client_id: int, db_session: Session = Depends(get_db)):
 
-    query_transaction = select(TransactionModel).where(TransactionModel.client_id == id)
+    query_transaction = select(TransactionModel).where(TransactionModel.client_id == client_id)
     transactions: TransactionOut = db_session.execute(query_transaction).scalars().all()
 
     if not transactions:
@@ -116,3 +116,25 @@ async def transactions_history(id: int, db_session: Session = Depends(get_db)):
         )
     
     return transactions
+
+
+@router.delete(
+    "/{client_id}",
+    summary="Deletar transações por id",
+    status_code=status.HTTP_204_NO_CONTENT, 
+    # response_model=list[TransactionOut]
+)
+async def transactions_history(client_id: int, db_session: Session = Depends(get_db)) -> None:
+
+    query_transaction = select(TransactionModel).where(TransactionModel.client_id == client_id)
+    transactions: TransactionOut = db_session.execute(query_transaction).scalars().first()
+
+    if not transactions:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Nenhuma transação encontrada para o id {id}."
+        )
+    
+    db_session.delete(transactions)
+    db_session.commit()
+
