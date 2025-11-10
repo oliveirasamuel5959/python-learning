@@ -24,20 +24,22 @@ def get_db():
         db.close()
 
 @router.post(
-    "/{id}",
+    "/",
     summary="Realizar uma nova transação",
     status_code=status.HTTP_201_CREATED, 
     response_model=TransactionOut
 )
-async def create_account(id: int, transaction_in: TransactionIn, db_session: Session = Depends(get_db)):
+async def transaction(transaction_in: TransactionIn, db_session: Session = Depends(get_db)):
+
+    client_name = transaction_in.client.name
     
-    query = select(ClientModel).where(ClientModel.id == id)
+    query = select(ClientModel).where(ClientModel.name == client_name)
     client = db_session.execute(query).scalars().first()
 
     if client is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Usuario no id {id} nao foi encontrado."
+            detail=f"Client {client_name} nao foi encontrado."
         )
     
     transaction_out = TransactionOut(
@@ -45,7 +47,7 @@ async def create_account(id: int, transaction_in: TransactionIn, db_session: Ses
         **transaction_in.model_dump()
     )
     
-    transaction_model = TransactionModel(**transaction_out.model_dump())
+    transaction_model = TransactionModel(**transaction_out.model_dump(exclude={'client'}))
     transaction_model.client_id = client.id
     
     db_session.add(transaction_model)

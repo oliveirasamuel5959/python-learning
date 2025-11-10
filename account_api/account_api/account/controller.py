@@ -1,10 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+from sqlalchemy import select
 from account_api.account.models import AccountModel
 from account_api.account.schemas import AccountIn
 from account_api.account.schemas import AccountOut
-from sqlalchemy.orm import Session
+from account_api.client.models import ClientModel
+from account_api.client.schemas import ClientIn
+from account_api.client.schemas import ClientOut
 from account_api.configs.database import SessionLocal
-from sqlalchemy import select
+
 
 router = APIRouter()
 
@@ -23,10 +27,34 @@ def get_db():
     response_model=AccountOut
 )
 async def create_account(account_in: AccountIn, db_session: Session = Depends(get_db)) -> AccountOut:
-    new_account = AccountModel(**account_in.model_dump())
-    db_session.add(new_account)
+
+    client_name = account_in.client_name
+    agencia = account_in.agencia
+
+    # query_account = select(AccountModel).where(AccountModel.agencia == agencia)
+    # account = db_session.execute(query_account).scalars().first()
+
+    query_client = select(ClientModel).where(ClientModel.name == client_name)
+    client = db_session.execute(query_client).scalars().first()
+
+    if client is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Client {client_name} nao foi encontrado."
+        )
+    
+    accout_out = AccountOut(
+        **account_in.model_dump()
+    )
+
+    account_model = AccountModel(**accout_out.model_dump(exclude={"client", "client_name"}))
+    account_model.value = 0
+    account_model.client_id = client.id
+    
+    db_session.add(account_model)
     db_session.commit()
-    return new_account
+    
+    return accout_out
 
 @router.get(
     "/",
