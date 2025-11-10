@@ -3,6 +3,7 @@ from pydantic import UUID4
 from datetime import datetime
 from typing import Annotated, Optional
 from account_api.client.schemas import ClientIn
+from account_api.account.schemas import AccountIn
 
 class OutMixIn(BaseModel):
   created_at: Annotated[datetime, Field(description="Data de criação")]

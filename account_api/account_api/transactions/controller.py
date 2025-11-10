@@ -10,7 +10,7 @@ from account_api.configs.database import SessionLocal
 from account_api.transactions.schemas import TransactionIn, TransactionOut
 from account_api.transactions.models import TransactionModel
 from account_api.client.models import ClientModel
-from account_api.client.schemas import ClientIn, ClientOut
+from account_api.account.models import AccountModel
 
 
 router = APIRouter()
@@ -33,14 +33,34 @@ async def transaction(transaction_in: TransactionIn, db_session: Session = Depen
 
     client_name = transaction_in.client.name
     
-    query = select(ClientModel).where(ClientModel.name == client_name)
-    client = db_session.execute(query).scalars().first()
+    query_client = select(ClientModel).where(ClientModel.name == client_name)
+    client = db_session.execute(query_client).scalars().first()
 
     if client is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Client {client_name} nao foi encontrado."
         )
+
+    query_account = select(AccountModel).where(AccountModel.client_id == client.id)
+    account = db_session.execute(query_account).scalars().first()
+
+    if account is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Conta do client {client_name} nao foi encontrado."
+        )
+    
+    if transaction_in.type == "deposito":
+        account.value = account.value + transaction_in.value
+        db_session.commit()
+        db_session.refresh(account)
+
+    elif transaction_in.type == "saque":
+        account.value = account.value - transaction_in.value
+        db_session.commit()
+        db_session.refresh(account)
+
     
     transaction_out = TransactionOut(
         created_at=datetime.now(timezone.utc).replace(tzinfo=None), 
