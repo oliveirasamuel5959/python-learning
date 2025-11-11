@@ -1,10 +1,7 @@
 from pydantic import BaseModel, Field
-from pydantic import UUID4
-from pydantic import PositiveFloat
 from datetime import datetime
-from typing import Annotated, Optional
+from typing import Annotated
 from account_api.client.schemas import ClientIn
-from account_api.account.schemas import AccountIn
 
 class OutMixIn(BaseModel):
   created_at: Annotated[datetime, Field(description="Data de criação")]
@@ -16,3 +13,4 @@ class TransactionIn(BaseModel):
 
 class TransactionOut(TransactionIn, OutMixIn):    
     pass
+
