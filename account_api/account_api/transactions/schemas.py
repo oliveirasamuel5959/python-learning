@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
 from pydantic import UUID4
+from pydantic import PositiveFloat
 from datetime import datetime
 from typing import Annotated, Optional
 from account_api.client.schemas import ClientIn

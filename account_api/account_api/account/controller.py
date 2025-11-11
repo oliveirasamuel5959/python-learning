@@ -82,12 +82,12 @@ async def get_accounts(db_session: Session = Depends(get_db)):
     "/{id}",
     summary="Obter detalhes de uma conta por ID",
     status_code=status.HTTP_200_OK, 
-    response_model=AccountOut
+    # response_model=AccountOut
 )
-async def get_account(id: int, db_session: Session = Depends(get_db)) -> AccountOut:
+async def get_account(id: int, db_session: Session = Depends(get_db)):
 
     query = select(AccountModel).where(AccountModel.id == id)
-    account: AccountOut = db_session.execute(query).scalars().first()
+    account = db_session.execute(query).scalars().first()
 
     if not account:
         raise HTTPException(
@@ -105,7 +105,7 @@ async def get_account(id: int, db_session: Session = Depends(get_db)) -> Account
 async def delete(id: int, db_session: Session = Depends(get_db)) -> None:
 
     query = select(AccountModel).where(AccountModel.id == id)
-    result: AccountOut = db_session.execute(query).scalars().first()
+    result = db_session.execute(query).scalars().first()
 
     if not result:
         raise HTTPException(
