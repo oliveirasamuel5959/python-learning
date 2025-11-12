@@ -92,9 +92,9 @@ async def transaction(transaction_in: TransactionIn, db_session: Session = Depen
     status_code=status.HTTP_200_OK, 
     # response_model=list[TransactionOut]
 )
-async def transactions_history(db_session: Session = Depends(get_db)):
+async def transactions_history(limit: int, db_session: Session = Depends(get_db)):
 
-    query_transaction = select(TransactionModel)
+    query_transaction = select(TransactionModel).limit(limit)
     transactions: list[TransactionOut] = db_session.execute(query_transaction).scalars().all()
 
     if not transactions:

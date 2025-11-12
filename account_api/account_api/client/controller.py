@@ -33,9 +33,9 @@ async def create_account(account_in: ClientIn, db_session: Session = Depends(get
     status_code=status.HTTP_200_OK, 
     response_model=list[ClientOut]
 )
-async def get_clients(db_session: Session = Depends(get_db)) -> list[ClientOut]:
+async def get_clients(limit: int, db_session: Session = Depends(get_db)) -> list[ClientOut]:
 
-    query = select(ClientModel)
+    query = select(ClientModel).limit(limit)
     clients: list[ClientOut] = db_session.execute(query).scalars().all()
 
     return clients

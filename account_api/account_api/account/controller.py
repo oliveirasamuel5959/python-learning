@@ -62,9 +62,9 @@ async def create_account(account_in: AccountIn, db_session: Session = Depends(ge
     status_code=status.HTTP_200_OK, 
     # response_model=list[AccountOut]
 )
-async def get_accounts(db_session: Session = Depends(get_db)):
+async def get_accounts(limit: int, db_session: Session = Depends(get_db)):
 
-    query = select(AccountModel)
+    query = select(AccountModel).limit(limit)
     results: list[AccountOut] = db_session.execute(query).scalars().all()
 
     if not results:
