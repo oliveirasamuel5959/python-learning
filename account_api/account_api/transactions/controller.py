@@ -6,7 +6,7 @@ from sqlalchemy import select
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from account_api.configs.database import SessionLocal
+from account_api.core.database import SessionLocal
 from account_api.transactions.schemas import TransactionIn, TransactionOut
 from account_api.transactions.models import TransactionModel
 from account_api.client.models import ClientModel

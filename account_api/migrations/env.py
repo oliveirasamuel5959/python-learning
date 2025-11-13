@@ -2,7 +2,7 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from account_api.configs.database import Base
+from account_api.core.database import Base
 from account_api.account.models import AccountModel
 from account_api.transactions.models import TransactionModel
 from account_api.client.models import ClientModel

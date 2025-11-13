@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from account_api.configs.database import SessionLocal
+from account_api.core.database import SessionLocal
 from account_api.client.schemas import ClientIn, ClientOut
 from account_api.client.models import ClientModel
 

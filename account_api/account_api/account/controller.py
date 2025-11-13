@@ -7,7 +7,7 @@ from account_api.account.schemas import AccountOut
 from account_api.client.models import ClientModel
 from account_api.client.schemas import ClientIn
 from account_api.client.schemas import ClientOut
-from account_api.configs.database import SessionLocal
+from account_api.core.database import SessionLocal
 
 
 router = APIRouter()

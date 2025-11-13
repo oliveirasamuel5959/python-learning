@@ -2,10 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey, tex
 from pydantic import UUID4
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
-from account_api.configs.database import Base, engine
-# from account_api.client.models import ClientModel
-
-# Base.metadata.create_all(bind=engine)
+from account_api.core.database import Base
 
 class TransactionModel(Base):
     __tablename__ = "transactions"
