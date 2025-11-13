@@ -106,14 +106,15 @@ async def get_account(id: int, db_session: Session = Depends(get_session)) -> Ac
 async def delete(id: int, db_session: Session = Depends(get_session)) -> None:
 
     query = select(AccountModel).where(AccountModel.id == id)
-    result = db_session.execute(query).scalars().first()
+    account = db_session.execute(query).scalars().first()
 
-    if not result:
+    if not account:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Conta não encontrada no id {id}"
         )
 
-    db_session.delete(result)
+    db_session.delete(account)
     db_session.commit()
+    db_session.refresh()
 
