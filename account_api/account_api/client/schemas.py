@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, EmailStr
 from typing import Annotated, Optional
 
 # nome: Annotated[str, Field(description="Nome completo do atleta", example="João Silva", max_length=50)]
@@ -12,7 +12,7 @@ from typing import Annotated, Optional
 
 class ClientIn(BaseModel):
     name: Annotated[str, Field(description="Nome do cliente", max_length=50, nullable=False)]
-    email: Annotated[str, Field(description="Email do cliente", max_length=50, nullable=False)]
+    email: Annotated[EmailStr, Field(description="Email do cliente", max_length=50, nullable=False)]
     idade: Annotated[int, Field(description="Idade do cliente", gt=18, nullable=False)]
     sexo: Annotated[str, Field(description="Sexo do cliente", max_length=20, nullable=False)]
 

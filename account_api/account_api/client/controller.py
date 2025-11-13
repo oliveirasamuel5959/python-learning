@@ -4,6 +4,7 @@ from sqlalchemy import select
 from account_api.core.database import get_session
 from account_api.client.schemas import ClientIn, ClientOut
 from account_api.client.models import ClientModel
+from account_api.core.auth.auth_handler import sign_jwt
 
 router = APIRouter()
 
@@ -11,13 +12,13 @@ router = APIRouter()
     "/",
     summary="Criar um novo cliente",
     status_code=status.HTTP_201_CREATED, 
-    response_model=ClientOut
+    # response_model=ClientOut
 )
-async def create_account(account_in: ClientIn, db_session: Session = Depends(get_session)) -> ClientOut:
-    client = ClientModel(**account_in.model_dump())
+async def create_user(client_in: ClientIn, db_session: Session = Depends(get_session)):
+    client = ClientModel(**client_in.model_dump())
     db_session.add(client)
     db_session.commit()
-    return client
+    return sign_jwt(client_in.email)
 
 @router.get(
     "/",
