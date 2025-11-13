@@ -1,19 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import select
-from account_api.core.database import SessionLocal
+from account_api.core.database import get_session
 from account_api.client.schemas import ClientIn, ClientOut
 from account_api.client.models import ClientModel
 
 router = APIRouter()
-
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post(
     "/",
@@ -21,7 +13,7 @@ def get_db():
     status_code=status.HTTP_201_CREATED, 
     response_model=ClientOut
 )
-async def create_account(account_in: ClientIn, db_session: Session = Depends(get_db)) -> ClientOut:
+async def create_account(account_in: ClientIn, db_session: Session = Depends(get_session)) -> ClientOut:
     client = ClientModel(**account_in.model_dump())
     db_session.add(client)
     db_session.commit()
@@ -33,7 +25,7 @@ async def create_account(account_in: ClientIn, db_session: Session = Depends(get
     status_code=status.HTTP_200_OK, 
     response_model=list[ClientOut]
 )
-async def get_clients(limit: int, db_session: Session = Depends(get_db)) -> list[ClientOut]:
+async def get_clients(limit: int, db_session: Session = Depends(get_session)) -> list[ClientOut]:
 
     query = select(ClientModel).limit(limit)
     clients: list[ClientOut] = db_session.execute(query).scalars().all()
@@ -46,7 +38,7 @@ async def get_clients(limit: int, db_session: Session = Depends(get_db)) -> list
     status_code=status.HTTP_200_OK, 
     response_model=ClientOut
 )
-async def get_client(id: int, db_session: Session = Depends(get_db)) -> ClientOut:
+async def get_client(id: int, db_session: Session = Depends(get_session)) -> ClientOut:
 
     query = select(ClientModel).where(ClientModel.id == id)
     client: ClientOut = db_session.execute(query).scalars().first()
@@ -64,7 +56,7 @@ async def get_client(id: int, db_session: Session = Depends(get_db)) -> ClientOu
     summary="Deletar client por id",
     status_code=status.HTTP_204_NO_CONTENT
 )
-async def delete_client(id: int, db_session: Session = Depends(get_db)) -> None:
+async def delete_client(id: int, db_session: Session = Depends(get_session)) -> None:
 
     query = select(ClientModel).where(ClientModel.id == id)
     client: ClientOut = db_session.execute(query).scalars().first()

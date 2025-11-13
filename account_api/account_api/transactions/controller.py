@@ -6,22 +6,13 @@ from sqlalchemy import select
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from account_api.core.database import SessionLocal
+from account_api.core.database import get_session
 from account_api.transactions.schemas import TransactionIn, TransactionOut
 from account_api.transactions.models import TransactionModel
 from account_api.client.models import ClientModel
 from account_api.account.models import AccountModel
 
-
 router = APIRouter()
-
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post(
     "/",
@@ -29,7 +20,7 @@ def get_db():
     status_code=status.HTTP_201_CREATED, 
     response_model=TransactionOut
 )
-async def transaction(transaction_in: TransactionIn, db_session: Session = Depends(get_db)):
+async def transaction(transaction_in: TransactionIn, db_session: Session = Depends(get_session)):
 
     client_name = transaction_in.client.name
     transaction_value = transaction_in.value
@@ -92,7 +83,7 @@ async def transaction(transaction_in: TransactionIn, db_session: Session = Depen
     status_code=status.HTTP_200_OK, 
     # response_model=list[TransactionOut]
 )
-async def transactions_history(limit: int, db_session: Session = Depends(get_db)):
+async def transactions_history(limit: int, db_session: Session = Depends(get_session)):
 
     query_transaction = select(TransactionModel).limit(limit)
     transactions: list[TransactionOut] = db_session.execute(query_transaction).scalars().all()
@@ -113,7 +104,7 @@ async def transactions_history(limit: int, db_session: Session = Depends(get_db)
     status_code=status.HTTP_200_OK, 
     # response_model=list[TransactionOut]
 )
-async def transactions_history(client_id: int, db_session: Session = Depends(get_db)):
+async def transactions_history(client_id: int, db_session: Session = Depends(get_session)):
 
     query_transaction = select(TransactionModel).where(TransactionModel.client_id == client_id)
     transactions: TransactionOut = db_session.execute(query_transaction).scalars().all()
@@ -133,7 +124,7 @@ async def transactions_history(client_id: int, db_session: Session = Depends(get
     status_code=status.HTTP_204_NO_CONTENT, 
     # response_model=list[TransactionOut]
 )
-async def transactions_history(client_id: int, db_session: Session = Depends(get_db)) -> None:
+async def transactions_history(client_id: int, db_session: Session = Depends(get_session)) -> None:
 
     query_transaction = select(TransactionModel).where(TransactionModel.client_id == client_id)
     transactions: TransactionOut = db_session.execute(query_transaction).scalars().first()

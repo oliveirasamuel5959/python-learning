@@ -7,18 +7,10 @@ from account_api.account.schemas import AccountOut
 from account_api.client.models import ClientModel
 from account_api.client.schemas import ClientIn
 from account_api.client.schemas import ClientOut
-from account_api.core.database import SessionLocal
+from account_api.core.database import get_session
 
 
 router = APIRouter()
-
-# Dependency to get DB session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post(
     "/",
@@ -26,7 +18,7 @@ def get_db():
     status_code=status.HTTP_201_CREATED, 
     response_model=AccountOut
 )
-async def create_account(account_in: AccountIn, db_session: Session = Depends(get_db)) -> AccountOut:
+async def create_account(account_in: AccountIn, db_session: Session = Depends(get_session)) -> AccountOut:
 
     client_name = account_in.client_name
     agencia = account_in.agencia
@@ -44,16 +36,17 @@ async def create_account(account_in: AccountIn, db_session: Session = Depends(ge
         )
     
     accout_out = AccountOut(
-        **account_in.model_dump()
+        **account_in.model_dump(exclude={"client", "client_name"})
     )
 
-    account_model = AccountModel(**accout_out.model_dump(exclude={"client", "client_name"}))
+    account_model = AccountModel(**accout_out.model_dump())
     account_model.value = 0
     account_model.client_id = client.id
     
     db_session.add(account_model)
     db_session.commit()
-    
+    db_session.refresh(account_model)
+
     return accout_out
 
 @router.get(
@@ -62,7 +55,7 @@ async def create_account(account_in: AccountIn, db_session: Session = Depends(ge
     status_code=status.HTTP_200_OK, 
     # response_model=list[AccountOut]
 )
-async def get_accounts(limit: int, db_session: Session = Depends(get_db)):
+async def get_accounts(limit: int, db_session: Session = Depends(get_session)):
 
     query = select(AccountModel).limit(limit)
     results: list[AccountOut] = db_session.execute(query).scalars().all()
@@ -82,9 +75,9 @@ async def get_accounts(limit: int, db_session: Session = Depends(get_db)):
     "/{id}",
     summary="Obter detalhes de uma conta por ID",
     status_code=status.HTTP_200_OK, 
-    # response_model=AccountOut
+    response_model=AccountOut
 )
-async def get_account(id: int, db_session: Session = Depends(get_db)):
+async def get_account(id: int, db_session: Session = Depends(get_session)) -> AccountOut:
 
     query = select(AccountModel).where(AccountModel.id == id)
     account = db_session.execute(query).scalars().first()
@@ -94,15 +87,23 @@ async def get_account(id: int, db_session: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND, 
             detail=f"Conta não encontrada no id {id}"
         )
+    
+    account_out = AccountOut(
+        bank_name=account.bank_name,
+        agencia=account.agencia,
+        account_type=account.account_type,
+        value=account.value
+    )
 
-    return account
+    return account_out
 
 @router.delete(
     "/{id}",
     summary="Deletar uma conta por ID",
-    status_code=status.HTTP_204_NO_CONTENT
+    status_code=status.HTTP_204_NO_CONTENT,
+    response_model=None
 )
-async def delete(id: int, db_session: Session = Depends(get_db)) -> None:
+async def delete(id: int, db_session: Session = Depends(get_session)) -> None:
 
     query = select(AccountModel).where(AccountModel.id == id)
     result = db_session.execute(query).scalars().first()

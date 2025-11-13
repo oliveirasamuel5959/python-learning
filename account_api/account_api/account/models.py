@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from account_api.core.database import Base
 
-# Base.metadata.create_all(bind=engine)
 
 class AccountModel(Base):
     __tablename__ = "accounts"
