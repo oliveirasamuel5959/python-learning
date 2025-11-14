@@ -1,9 +1,16 @@
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
 
+from passlib.context import CryptContext
+
 SECRET_KEY = "REPLACE_THIS"
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_MINUTES = 30
+
+pwd_context = CryptContext(schemes=["bcrypt", deprecated="auto"])
+
+def get_password_hash(password: str):
+    return pwd_context.hash(password)
 
 def create_token(data, expires_delta=None):
     to_encode = data.copy()
