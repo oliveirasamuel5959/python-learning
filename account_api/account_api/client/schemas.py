@@ -15,6 +15,17 @@ class ClientIn(BaseModel):
     email: Annotated[EmailStr, Field(description="Email do cliente", max_length=50, nullable=False)]
     idade: Annotated[int, Field(description="Idade do cliente", gt=18, nullable=False)]
     sexo: Annotated[str, Field(description="Sexo do cliente", max_length=20, nullable=False)]
+    hash_password: Annotated[str, Field(description="Senha de acesso", max_length=100, nullable=False)]
 
 class ClientOut(ClientIn):    
     pass
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str | None = None
+
+class UserInDB(ClientIn):
+    hashed_password: str
