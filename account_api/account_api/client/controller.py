@@ -9,6 +9,8 @@ from account_api.client.models import ClientModel
 from account_api.core.security import auth_user, get_password_hash
 from account_api.core import security
 from account_api.core.security import create_token, get_current_active_user
+from account_api.core.configs.logger_handler import logger
+
 
 router = APIRouter()
 
@@ -19,15 +21,19 @@ router = APIRouter()
     response_model=Token
 )
 async def login_for_access_token(client_in: ClientIn, form_data: OAuth2PasswordRequestForm = Depends()):
+    logger.info("Start user authentication")
     user = auth_user(form_data.username, form_data.password)
 
     if not user:
+        logger.info("User not found")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, 
             detail="Usuário ou senha inválidos",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    logger.info(user.name)
+
     access_token_expires = timedelta(minutes=security.TOKEN_EXPIRE_MINUTES)
     access_token = create_token(data={"sub": user.name}, expires_delta=access_token_expires)
 

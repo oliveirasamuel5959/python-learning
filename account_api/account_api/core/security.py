@@ -6,6 +6,7 @@ from passlib.context import CryptContext
 
 from account_api.client.schemas import TokenData, UserInDB
 from account_api.client.services import get_user
+from account_api.core.configs.logger_handler import logger
 
 SECRET_KEY = "testst"
 ALGORITHM = "HS256"
@@ -34,11 +35,14 @@ def decode_token(token: str):
         return None
     
 def auth_user(username: str, password: str):
+    logger.info("Start user authentication")
     user = get_user(username)
 
     if not user:
+        logger.info("User not found")
         return False
     if not verify_password(password, user.hash_password):
+        logger.info("password incorrect")
         return False
     
     return user
