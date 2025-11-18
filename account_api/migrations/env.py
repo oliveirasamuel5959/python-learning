@@ -6,7 +6,7 @@ from account_api.core.database import Base
 from account_api.api.accounts.models import AccountModel
 from account_api.api.transactions.models import TransactionModel
 from account_api.api.users.models import ClientModel
-from account_api.api.auth.models import TokenModel
+# from account_api.api.auth.models import TokenModel
 
 from alembic import context
 

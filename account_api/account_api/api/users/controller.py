@@ -6,6 +6,7 @@ from account_api.core.database import get_session
 from account_api.api.users.schemas import ClientIn, ClientOut
 from account_api.api.users.models import ClientModel
 from account_api.core.security import get_password_hash
+from account_api.core.security import get_current_user
 from account_api.core.configs.logger_handler import logger
 
 router = APIRouter()
@@ -42,6 +43,7 @@ async def create_user(client_in: ClientIn, db_session: Session = Depends(get_ses
 async def get_clients(
     limit: int, 
     db_session: Session = Depends(get_session),
+    current_user: ClientModel = Depends(get_current_user)
     ) -> list[ClientOut]:
 
     query = select(ClientModel).limit(limit)
