@@ -1,44 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from datetime import timedelta
 from sqlalchemy.orm import Session
 from sqlalchemy import select
+from account_api.core.security import oauth2_scheme
 from account_api.core.database import get_session
-from account_api.client.schemas import ClientIn, ClientOut, Token
-from account_api.client.models import ClientModel
-from account_api.core.security import auth_user, get_password_hash
-from account_api.core import security
-from account_api.core.security import create_token, get_current_active_user
+from account_api.api.users.schemas import ClientIn, ClientOut
+from account_api.api.users.models import ClientModel
+from account_api.core.security import get_password_hash
 from account_api.core.configs.logger_handler import logger
 
-
 router = APIRouter()
-
-@router.post(
-    "/token",
-    summary="Authentication",
-    status_code=status.HTTP_200_OK, 
-    response_model=Token
-)
-async def login_for_access_token(client_in: ClientIn, form_data: OAuth2PasswordRequestForm = Depends()):
-    logger.info("Start user authentication")
-    user = auth_user(form_data.username, form_data.password)
-
-    if not user:
-        logger.info("User not found")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, 
-            detail="Usuário ou senha inválidos",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    logger.info(user.name)
-
-    access_token_expires = timedelta(minutes=security.TOKEN_EXPIRE_MINUTES)
-    access_token = create_token(data={"sub": user.name}, expires_delta=access_token_expires)
-
-    return {"access_token": access_token, "token_type": "bearer"}
-    
 
 @router.post(
     "/",
@@ -72,7 +42,6 @@ async def create_user(client_in: ClientIn, db_session: Session = Depends(get_ses
 async def get_clients(
     limit: int, 
     db_session: Session = Depends(get_session),
-    current_user: ClientModel = Depends(get_current_active_user)
     ) -> list[ClientOut]:
 
     query = select(ClientModel).limit(limit)

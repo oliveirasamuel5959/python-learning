@@ -12,6 +12,5 @@ class ClientModel(Base):
     idade: Mapped[int] = mapped_column(Integer, nullable=False)
     sexo: Mapped[str] = mapped_column(String(20), nullable=False)
     hash_password: Mapped[str] = mapped_column(String(255), nullable=False)
-    disabled: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
     transactions: Mapped[List["TransactionModel"]] = relationship("TransactionModel", back_populates="client")
     account: Mapped["AccountModel"] = relationship("AccountModel", back_populates="client")

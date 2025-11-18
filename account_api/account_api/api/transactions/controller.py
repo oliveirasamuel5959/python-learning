@@ -7,10 +7,10 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 from account_api.core.database import get_session
-from account_api.transactions.schemas import TransactionIn, TransactionOut
-from account_api.transactions.models import TransactionModel
-from account_api.client.models import ClientModel
-from account_api.account.models import AccountModel
+from account_api.api.transactions.schemas import TransactionIn, TransactionOut
+from account_api.api.transactions.models import TransactionModel
+from account_api.api.users.models import ClientModel
+from account_api.api.accounts.models import AccountModel
 
 router = APIRouter()
 
