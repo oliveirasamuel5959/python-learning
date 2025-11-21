@@ -3,10 +3,11 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from account_api.core.security import oauth2_scheme
 from account_api.core.database import get_session
-from account_api.api.users.schemas import ClientIn, ClientOut
+from account_api.api.users.schemas import ClientOut
 from account_api.api.users.models import ClientModel
 from account_api.core.configs.logger_handler import logger
 from account_api.core.auth import get_current_user
+from account_api.core.configs.logger_handler import logger
 
 router = APIRouter()
 
@@ -16,13 +17,14 @@ router = APIRouter()
     status_code=status.HTTP_200_OK, 
     response_model=list[ClientOut]
 )
-async def get_clients(
+def get_clients(
     limit: int,
     user: ClientModel = Depends(get_current_user),
     db_session: Session = Depends(get_session),
     ) -> list[ClientOut]:
 
-    query = select(user).limit(limit)
+    logger.info(f"Fetching clients with limit: {limit}")
+    query = select(ClientModel).limit(limit)
     clients: list[ClientOut] = db_session.execute(query).scalars().all()
 
     return clients
