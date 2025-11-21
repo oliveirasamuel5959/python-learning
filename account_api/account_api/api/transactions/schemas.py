@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Annotated
-from account_api.client.schemas import ClientIn
+from account_api.api.users.schemas import ClientIn
 
 class OutMixIn(BaseModel):
   created_at: Annotated[datetime, Field(description="Data de criação")]
