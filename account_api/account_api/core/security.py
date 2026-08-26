@@ -37,3 +37,4 @@ def verify_token(token: str):
         raise Exception("Token has expired")
     except jwt.PyJWTError:
         raise Exception("Invalid token")
+    
