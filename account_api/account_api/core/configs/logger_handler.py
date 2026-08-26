@@ -1,12 +1,32 @@
-import logging.config
-import json
-import os
+import logging
+import sys
 
-config_file_path = os.path.join(os.path.dirname(__file__), 'logging_config.json')
+# Nome do logger da sua aplicação
+LOGGER_NAME = "account_api"
 
-with open(config_file_path, 'r') as f:
-    config = json.load(f)
-    
-logging.config.dictConfig(config)
+def get_logger() -> logging.Logger:
+    logger = logging.getLogger(LOGGER_NAME)
 
-logger = logging.getLogger('account_api')
+    # Evita criar handlers duplicados quando o módulo é importado várias vezes
+    if not logger.handlers:
+        logger.setLevel(logging.INFO)
+
+        # Handler para console
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setLevel(logging.INFO)
+
+        # Formato do log
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+        console_handler.setFormatter(formatter)
+
+        logger.addHandler(console_handler)
+        logger.propagate = False  # impede duplicação com uvicorn
+
+    return logger
+
+
+# Logger que você vai importar
+logger = get_logger()
+

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Annotated, Optional
-from account_api.client.schemas import ClientIn
+from account_api.api.users.schemas import ClientIn
 
 class AccountIn(BaseModel):
     bank_name: Annotated[str, Field(description="Nome do banco cadastrado", max_length=50, nullable=False)]

@@ -3,35 +3,13 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 from account_api.core.security import oauth2_scheme
 from account_api.core.database import get_session
-from account_api.api.users.schemas import ClientIn, ClientOut
+from account_api.api.users.schemas import ClientOut
 from account_api.api.users.models import ClientModel
-from account_api.core.security import get_password_hash
+from account_api.core.configs.logger_handler import logger
+from account_api.core.auth import get_current_user
 from account_api.core.configs.logger_handler import logger
 
 router = APIRouter()
-
-@router.post(
-    "/",
-    summary="Criar um novo cliente",
-    status_code=status.HTTP_201_CREATED, 
-    # response_model=ClientOut
-)
-async def create_user(client_in: ClientIn, db_session: Session = Depends(get_session)):
-
-    hash_pwd = get_password_hash(client_in.hash_password)
-    
-    client_out = ClientIn(
-        hash_password=hash_pwd,
-        **client_in.model_dump(exclude={"hash_password"})
-    )
-
-    client = ClientModel(**client_out.model_dump())
-
-    db_session.add(client)
-    db_session.commit()
-    db_session.refresh(client)
-
-    return client
 
 @router.get(
     "/",
@@ -39,11 +17,13 @@ async def create_user(client_in: ClientIn, db_session: Session = Depends(get_ses
     status_code=status.HTTP_200_OK, 
     response_model=list[ClientOut]
 )
-async def get_clients(
-    limit: int, 
+def get_clients(
+    limit: int,
+    user: ClientModel = Depends(get_current_user),
     db_session: Session = Depends(get_session),
     ) -> list[ClientOut]:
 
+    logger.info(f"Fetching clients with limit: {limit}")
     query = select(ClientModel).limit(limit)
     clients: list[ClientOut] = db_session.execute(query).scalars().all()
 

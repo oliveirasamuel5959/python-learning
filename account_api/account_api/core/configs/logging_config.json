@@ -22,7 +22,7 @@
         }
     },
     "loggers": {
-        "my_app": {
+        "account_api": {
             "level": "DEBUG",
             "handlers": ["consoleHandler", "fileHandler"],
             "propagate": false

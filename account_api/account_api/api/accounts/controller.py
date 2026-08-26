@@ -8,8 +8,6 @@ from account_api.api.users.models import ClientModel
 from account_api.api.users.schemas import ClientIn
 from account_api.api.users.schemas import ClientOut
 from account_api.core.database import get_session
-from account_api.core.auth.auth_bearer import JWTBearer
-from account_api.core.auth.auth_handler import decode_jwt
 
 
 router = APIRouter()
@@ -20,15 +18,8 @@ router = APIRouter()
     status_code=status.HTTP_201_CREATED, 
     response_model=AccountOut
 )
-async def create_account(account_in: AccountIn, db_session: Session = Depends(get_session), token: str = Depends(JWTBearer())) -> AccountOut:
-
-    payload = decode_jwt("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRGFyaXVzLkRhdmlzQHlhaG9vLmNvbSIsImV4cGlyZXMiOjE3NjMwMzc3MjYuMzQxNTA0fQ.1ZF1MmbxpP1Zw5uqV-eIn25GrwfH9ZLmA7mfSAeMets")
-
-    payload = decode_jwt(token)
-    if not payload:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
-    # return payload
-
+async def create_account(account_in: AccountIn, db_session: Session = Depends(get_session)) -> AccountOut:
+    
     client_name = account_in.client_name
     agencia = account_in.agencia
     

@@ -1,0 +1,948 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Account API",
+    "summary": "API for banck account transactions control",
+    "description": "\nBanck account transactions management.\n\n## Client\n\n* **Add clients**.\n* **List clients**.\n* **List client by ID**.\n* **Delete client by ID**.\n\n## Account\n\n* **Create accounts**.\n* **List accounts**.\n* **List account transactions by ID**.\n* **Delete account by ID**.\n\n## Transaction\n\n* **Create transactions deposit/withdraw**.\n* **Check transactions history by ID**.\n* **Limit transactions values* (_not implemented_).\n\n    ",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Staging environment"
+    },
+    {
+      "url": "https://prod.example.com",
+      "description": "Production environment"
+    }
+  ],
+  "paths": {
+    "/accounts/": {
+      "post": {
+        "tags": [
+          "account"
+        ],
+        "summary": "Criar uma nova conta",
+        "operationId": "create_account_accounts__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "account"
+        ],
+        "summary": "Listar todas as contas",
+        "operationId": "get_accounts_accounts__get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{id}": {
+      "get": {
+        "tags": [
+          "account"
+        ],
+        "summary": "Obter detalhes de uma conta por ID",
+        "operationId": "get_account_accounts__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "account"
+        ],
+        "summary": "Deletar uma conta por ID",
+        "operationId": "delete_accounts__id__delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/": {
+      "get": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Listar todos os clientes",
+        "operationId": "get_clients_clients__get",
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientOut"
+                  },
+                  "title": "Response Get Clients Clients  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/{id}": {
+      "get": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Retornar client por id",
+        "operationId": "get_client_clients__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Deletar client por id",
+        "operationId": "delete_client_clients__id__delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/": {
+      "post": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Realizar uma nova transação",
+        "operationId": "transaction_transactions__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Listar todas as transações",
+        "operationId": "transactions_history_transactions__get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{client_id}": {
+      "get": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Listar transações por id",
+        "operationId": "transactions_history_transactions__client_id__get",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Client Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "transaction"
+        ],
+        "summary": "Deletar transações por id",
+        "operationId": "transactions_history_transactions__client_id__delete",
+        "parameters": [
+          {
+            "name": "client_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Client Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "User Sign-Up",
+        "operationId": "signup_auth_signup_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "User Login",
+        "operationId": "login_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_login_auth_login_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountIn": {
+        "properties": {
+          "bank_name": {
+            "type": "string",
+            "maxLength": 50,
+            "title": "Bank Name",
+            "description": "Nome do banco cadastrado",
+            "nullable": false
+          },
+          "agencia": {
+            "type": "string",
+            "title": "Agencia",
+            "description": "Número da agência",
+            "nullable": false
+          },
+          "account_type": {
+            "type": "string",
+            "maxLength": 20,
+            "title": "Account Type",
+            "description": "Tipo de conta",
+            "nullable": false
+          },
+          "client_name": {
+            "type": "string",
+            "maxLength": 50,
+            "title": "Client Name",
+            "description": "Nome do cliente cadastrado",
+            "nullable": false
+          },
+          "client": {
+            "$ref": "#/components/schemas/ClientIn",
+            "description": "Nome do cliente",
+            "nullable": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "bank_name",
+          "agencia",
+          "account_type",
+          "client_name",
+          "client"
+        ],
+        "title": "AccountIn"
+      },
+      "AccountOut": {
+        "properties": {
+          "bank_name": {
+            "type": "string",
+            "maxLength": 50,
+            "title": "Bank Name",
+            "description": "Nome do banco cadastrado",
+            "nullable": false
+          },
+          "agencia": {
+            "type": "string",
+            "title": "Agencia",
+            "description": "Número da agência",
+            "nullable": false
+          },
+          "account_type": {
+            "type": "string",
+            "maxLength": 20,
+            "title": "Account Type",
+            "description": "Tipo de conta",
+            "nullable": false
+          },
+          "value": {
+            "type": "integer",
+            "title": "Value",
+            "description": "Valor na conta",
+            "nullable": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "bank_name",
+          "agencia",
+          "account_type",
+          "value"
+        ],
+        "title": "AccountOut"
+      },
+      "Body_login_auth_login_post": {
+        "properties": {
+          "grant_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^password$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "title": "Password"
+          },
+          "scope": {
+            "type": "string",
+            "title": "Scope",
+            "default": ""
+          },
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "format": "password",
+            "title": "Client Secret"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_login_auth_login_post"
+      },
+      "ClientIn": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "title": "Name",
+            "description": "Nome do cliente",
+            "nullable": false
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 50,
+            "format": "email",
+            "title": "Email",
+            "description": "Email do cliente",
+            "nullable": false
+          },
+          "idade": {
+            "type": "integer",
+            "exclusiveMinimum": 18,
+            "title": "Idade",
+            "description": "Idade do cliente",
+            "nullable": false
+          },
+          "sexo": {
+            "type": "string",
+            "maxLength": 20,
+            "title": "Sexo",
+            "description": "Sexo do cliente",
+            "nullable": false
+          },
+          "hash_password": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Hash Password",
+            "description": "Senha de acesso",
+            "nullable": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "idade",
+          "sexo",
+          "hash_password"
+        ],
+        "title": "ClientIn"
+      },
+      "ClientOut": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "title": "Name",
+            "description": "Nome do cliente",
+            "nullable": false
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 50,
+            "format": "email",
+            "title": "Email",
+            "description": "Email do cliente",
+            "nullable": false
+          },
+          "idade": {
+            "type": "integer",
+            "exclusiveMinimum": 18,
+            "title": "Idade",
+            "description": "Idade do cliente",
+            "nullable": false
+          },
+          "sexo": {
+            "type": "string",
+            "maxLength": 20,
+            "title": "Sexo",
+            "description": "Sexo do cliente",
+            "nullable": false
+          },
+          "hash_password": {
+            "type": "string",
+            "maxLength": 100,
+            "title": "Hash Password",
+            "description": "Senha de acesso",
+            "nullable": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "idade",
+          "sexo",
+          "hash_password"
+        ],
+        "title": "ClientOut"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Token": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "refresh_token",
+          "token_type"
+        ],
+        "title": "Token"
+      },
+      "TransactionIn": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "maxLength": 20,
+            "title": "Type",
+            "description": "Tipo de transação",
+            "nullable": false
+          },
+          "value": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "title": "Value",
+            "description": "Valor da transação",
+            "nullable": false
+          },
+          "client": {
+            "$ref": "#/components/schemas/ClientIn",
+            "description": "Nome do cliente",
+            "nullable": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "value",
+          "client"
+        ],
+        "title": "TransactionIn"
+      },
+      "TransactionOut": {
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At",
+            "description": "Data de criação"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 20,
+            "title": "Type",
+            "description": "Tipo de transação",
+            "nullable": false
+          },
+          "value": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "title": "Value",
+            "description": "Valor da transação",
+            "nullable": false
+          },
+          "client": {
+            "$ref": "#/components/schemas/ClientIn",
+            "description": "Nome do cliente",
+            "nullable": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "created_at",
+          "type",
+          "value",
+          "client"
+        ],
+        "title": "TransactionOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "oauth2",
+        "flows": {
+          "password": {
+            "scopes": {
+
+            },
+            "tokenUrl": "/login"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "client",
+      "description": "Operations to add clients"
+    },
+    {
+      "name": "account",
+      "description": "Operations to maintain accounts"
+    },
+    {
+      "name": "transaction",
+      "description": "Operations to maintain transactions"
+    }
+  ]
+}

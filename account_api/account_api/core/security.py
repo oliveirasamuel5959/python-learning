@@ -1,17 +1,25 @@
+import os
+from jose import jwt
+from datetime import datetime, timedelta, timezone
+from typing import Union, Any
+from sqlalchemy.orm import Session
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-import jwt
-from datetime import datetime, timedelta
-from typing import Optional
 from passlib.context import CryptContext
+from account_api.api.users.models import ClientModel
+from account_api.core.database import get_session
 
-SECRET_KEY = "your-secret-key"  # Use a secure way to store your secret key in production
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+REFRESH_TOKEN_EXPIRE_MINUTES = 30 
+
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30  # Token will expire in 30 minutes
+JWT_SECRET_KEY = "secret-key"
+JWT_REFRESH_SECRET_KEY = "refresh-secret-key"
 
 pwd_context = CryptContext(schemes=["argon2", "bcrypt_sha256"], deprecated="auto")
 
 # OAuth2PasswordBearer provides a way to extract the token from the Authorization header
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 def hash_password(password: str):
     return pwd_context.hash(password)
@@ -19,16 +27,17 @@ def hash_password(password: str):
 def verify_password(password, hashed_password):
     return pwd_context.verify(password, hashed_password)
 
-def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+def create_access_token(subject: Union[str, Any], expires_delta: int = None) -> str:
+    if expires_delta is not None:
+        expires_delta = datetime.now(timezone.utc) + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        expires_delta = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    to_encode = {"exp": expires_delta, "sub": str(subject)}
+    encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
     return encoded_jwt
 
+<<<<<<< HEAD
 def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -38,3 +47,16 @@ def verify_token(token: str):
     except jwt.PyJWTError:
         raise Exception("Invalid token")
     
+=======
+def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) -> str:
+    if expires_delta is not None:
+        expires_delta = datetime.now(timezone.utc) + expires_delta
+    else:
+        expires_delta = datetime.now(timezone.utc) + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
+
+    to_encode = {"exp": expires_delta, "sub": str(subject)}
+    encoded_jwt = jwt.encode(to_encode, JWT_REFRESH_SECRET_KEY, ALGORITHM)
+    return encoded_jwt
+
+
+>>>>>>> 5171cabc2a006d85fcdb7538f7c134b36b60c9ea
