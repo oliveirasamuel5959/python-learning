@@ -22,3 +22,22 @@ LEFT JOIN cities c
 ON t.city_id = c.city_id
 GROUP BY c.city_name
 ORDER BY total_requests DESC;
+
+-- Rank the top 5 uber drivers by ratings
+WITH UberDriversRanked AS (
+  SELECT
+    first_name,
+    signup_date,
+    TIMESTAMPDIFF(YEAR, signup_date, NOW()) AS years_singned_up,
+    TIMESTAMPDIFF(MONTH, signup_date, NOW()) AS months_signed_up,
+    rating,
+    RANK() OVER(ORDER BY rating DESC) AS driver_rank
+  FROM
+    drivers
+  WHERE rating IS NOT NULL
+)
+SELECT *
+FROM UberDriversRanked
+WHERE driver_rank = 1
+ORDER BY signup_date DESC
+LIMIT 5;
